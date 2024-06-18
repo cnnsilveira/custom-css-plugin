@@ -104,7 +104,7 @@ if ( ! function_exists( 'cndev__valid_enqueue' ) ) {
 	}
 }
 
-if ( ! function_exists( 'cndev__custom_css' ) ) {
+if ( ! function_exists( 'cndev__enqueues' ) ) {
 	/**
 	 * Includes the custom CSS for this project on a 
 	 * more effective way, by enqueueing a minified version 
@@ -114,16 +114,15 @@ if ( ! function_exists( 'cndev__custom_css' ) ) {
 	 * 
 	 * @return void
 	 */
-	function cndev__custom_css() {
+	function cndev__enqueues() {
 		/**
 		 * Looping files.
 		 */
 		foreach ( CNDCCSS__FILES as $reference => $file_info ) {
-			$scope = isset( $file_info['scope'] ) && in_array( $file_info['scope'], array( 'front', 'admin', 'all' ), true ) ? $file_info['scope'] : 'front';
-
 			/**
 			 * Verifies file information.
 			 */
+			$scope   = isset( $file_info['scope'] ) && in_array( $file_info['scope'], array( 'front', 'admin', 'all' ), true ) ? $file_info['scope'] : 'front';
 			$path    = isset( $file_info['path'] ) ? $file_info['path'] : '';
 			$deps    = isset( $file_info['deps'] ) ? $file_info['deps'] : array();
 			$version = isset( $file_info['version'] ) ? $file_info['version'] : false;
@@ -141,11 +140,8 @@ if ( ! function_exists( 'cndev__custom_css' ) ) {
 		}
 	}
 	/**
-	 * Front-end hook.
+	 * Enqueue hooks.
 	 */
-	add_action( 'wp_enqueue_scripts', 'cndev__custom_css', CNDCCSS__HOOK_PRIORITY );
-	/**
-	 * Back-end hook.
-	 */
-	add_action( 'admin_enqueue_scripts', 'cndev__custom_css', CNDCCSS__HOOK_PRIORITY );
+	add_action( 'wp_enqueue_scripts', 'cndev__enqueues', CNDCCSS__HOOK_PRIORITY );
+	add_action( 'admin_enqueue_scripts', 'cndev__enqueues', CNDCCSS__HOOK_PRIORITY );
 }
